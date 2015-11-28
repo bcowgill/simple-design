@@ -29,13 +29,18 @@ class Privacy {
     }
 
     /** @abstract */
-    toDebugString (privates, className) {
-        className = className || category;
-        privates = privates ? privates.get(this) : {};
-        return className + ' ' + util.inspect(privates,
+    toDebugString (into, derivedPrivates, derivedClassName) {
+        derivedClassName = derivedClassName || category;
+        const inherits = this._inherits().chain.join('->'),
+            _private = this._private(into,  derivedPrivates, derivedClassName);
+
+        var dump = util.inspect(_private,
                 debugFormat.showHidden,
                 debugFormat.depth,
                 debugFormat.colorize);
+        dump = dump.replace(/,\s+Privacy: {}/, '');
+
+        return `<${inherits} ${dump}>`;
     }
 
     get _className () {
@@ -51,17 +56,18 @@ class Privacy {
     }
 
     /** @abstract */
-    _private (into, privates, className) {
+    _private (into, derivedPrivates, derivedClassName) {
         into = into || {};
-        className = className || category;
-        privates = privates ? privates.get(this) : {};
-        into[className] = JSON.parse(JSON.stringify(privates));
+        derivedClassName = derivedClassName || category;
+        derivedPrivates = (derivedPrivates && derivedPrivates.get) ?
+            derivedPrivates.get(this) : {};
+        into[derivedClassName] = JSON.parse(JSON.stringify(derivedPrivates));
         return into;
     }
 
     /** @protected */
-    _setPrivate (privates, key, value) {
-        const _privates = privates.get(this);
+    _setPrivate (derivedPrivates, key, value) {
+        const _privates = derivedPrivates.get(this);
         _privates[key] = value;
         return this;
     }

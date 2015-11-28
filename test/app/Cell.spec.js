@@ -55,7 +55,7 @@ describe('Cell', function () {
     it('a cell can format its private data nicely', function () {
 
         expect(this.cell.toDebugString())
-            .to.be.equal('<Cell { location: Location {} } isa Privacy {}>');
+            .to.be.equal('<Cell->Privacy { Cell: { location: {} } }>');
 
     });
 

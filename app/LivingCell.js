@@ -27,11 +27,10 @@ class LivingCell extends Cell
     }
 
     /** @override */
-    toDebugString (mine, className) {
-        const privates = void 0; // no private data yet
-        const myDebug = super.toDebugString(mine || privates, className || category),
-            myParentDebug = super.toDebugString();
-        return `<${myDebug} isa ${myParentDebug}>`;
+    toDebugString (into, derivedPrivates, derivedClassName) {
+        const privates = {}; // no private data yet
+        return super.toDebugString(into, derivedPrivates || privates,
+            derivedClassName || category);
     }
 
     /** @override */
@@ -43,9 +42,9 @@ class LivingCell extends Cell
     }
 
     /** @override */
-    _private (into, mine, className) {
-        const privates = void 0; // no private data yet
-        into = super._private(into, mine || privates, className || category);
+    _private (into, derivedPrivates, derivedClassName) {
+        const privates = {}; // no private data yet
+        into = super._private(into, derivedPrivates || privates, derivedClassName || category);
         return super._private(into);
     }
 }

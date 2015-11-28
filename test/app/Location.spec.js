@@ -121,7 +121,7 @@ describe('Location', function () {
             const location = LocationFactory.origin();
 
             expect(location.toDebugString())
-                .to.be.equal('<Location { x: 0, y: 0 } isa Privacy {}>');
+                .to.be.equal('<Location->Privacy { Location: { x: 0, y: 0 } }>');
 
         });
 

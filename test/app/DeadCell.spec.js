@@ -29,10 +29,8 @@ describe('DeadCell', function () {
     it('a DeadCell can format its private data nicely', function () {
 
         expect(this.cell.toDebugString())
-            .to.be.equal('<<<DeadCell { location: Location {} } isa Privacy {}> ' +
-                'isa <Cell { location: Location {} } isa Privacy {}>> ' +
-                'isa <<EmptyCell { location: Location {} } isa Privacy {}> ' +
-                'isa <Cell { location: Location {} } isa Privacy {}>>>');
+            .to.be.equal('<DeadCell->EmptyCell->Cell->Privacy { DeadCell: {},\n  ' +
+                'Cell: { location: {} },\n  EmptyCell: {} }>');
 
     });
 
@@ -68,12 +66,8 @@ describe('DeadCell', function () {
         expect(this.cell._private())
             .to.be.deep.equal({
             Privacy: {},
-            DeadCell: {
-                location: {}
-            },
-            EmptyCell: {
-                location: {}
-            },
+            DeadCell: {},
+            EmptyCell: {},
             Cell: {
                 location: {}
             }

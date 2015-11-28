@@ -29,8 +29,8 @@ describe('EmptyCell', function () {
     it('an EmptyCell can format its private data nicely', function () {
 
         expect(this.cell.toDebugString())
-            .to.be.equal('<<EmptyCell { location: Location {} } isa Privacy {}> ' +
-                'isa <Cell { location: Location {} } isa Privacy {}>>');
+            .to.be.equal('<EmptyCell->Cell->Privacy { EmptyCell: {}, ' +
+                'Cell: { location: {} } }>');
 
     });
 
@@ -65,9 +65,7 @@ describe('EmptyCell', function () {
         expect(this.cell._private())
             .to.be.deep.equal({
             Privacy: {},
-            EmptyCell: {
-                location: {}
-            },
+            EmptyCell: {},
             Cell: {
                 location: {}
             }

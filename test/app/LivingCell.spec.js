@@ -29,9 +29,8 @@ describe('LivingCell', function () {
     it('a LivingCell can format its private data nicely', function () {
 
         expect(this.cell.toDebugString())
-            .to.be.equal('<<LivingCell { location: Location {} } isa Privacy {}> ' +
-                'isa <Cell { location: Location {} } isa Privacy {}>>');
-
+            .to.be.equal('<LivingCell->Cell->Privacy { LivingCell: {}, ' +
+                'Cell: { location: {} } }>');
     });
 
     it('a LivingCell has a glyph to show what it looks like', function () {
@@ -65,9 +64,7 @@ describe('LivingCell', function () {
         expect(this.cell._private())
             .to.be.deep.equal({
             Privacy: {},
-            LivingCell: {
-                location: {}
-            },
+            LivingCell: {},
             Cell: {
                 location: {}
             }

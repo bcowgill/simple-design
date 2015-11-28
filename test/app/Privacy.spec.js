@@ -30,10 +30,9 @@ describe('Privacy', function () {
         }
 
         /** @override */
-        toDebugString (privates, className) {
-            const myDebug = super.toDebugString(privates || secrets, className || category),
-                myParentDebug = super.toDebugString();
-            return `<${myDebug} isa ${myParentDebug}>`;
+        toDebugString (into, derivedPrivates, derivedClassName) {
+            return super.toDebugString(into,
+                derivedPrivates || secrets, derivedClassName || category);
         }
 
         /** @override */
@@ -45,8 +44,8 @@ describe('Privacy', function () {
         }
 
         /** @override */
-        _private (into, privates, className) {
-            into = super._private(into, privates || secrets, className || category);
+        _private (into, derivedPrivates, derivedClassName) {
+            into = super._private(into, derivedPrivates || secrets, derivedClassName || category);
             return super._private(into);
         }
     }
@@ -67,8 +66,8 @@ describe('Privacy', function () {
         });
 
         it('should format privates in a nice debug string', function () {
-            expect(this.object.toDebugString(this.privates))
-                .to.be.equal('Privacy { private: true }');
+            expect(this.object.toDebugString({}, this.privates))
+                .to.be.equal('<Privacy { Privacy: { private: true } }>');
         });
 
         it('should provide inheritance information', function () {
@@ -112,9 +111,8 @@ describe('Privacy', function () {
 
             this.object._setPrivate(this.privates, 'added', true);
 
-            expect(this.object.toDebugString(this.privates))
-                .to.be.equal('Privacy { private: true, ' +
-                    'added: true }');
+            expect(this.object.toDebugString({}, this.privates))
+                .to.be.equal('<Privacy { Privacy: { private: true, added: true } }>');
         });
     });
 
@@ -163,9 +161,12 @@ describe('Privacy', function () {
         it('should set privates for derived classes', function () {
 
             expect(this.secret.secret).to.be.equal('quiet');
+        });
+
+        it('should format privates in a nice debug string', function () {
             expect(this.secret.toDebugString())
-                .to.be.equal('<Secret { secret: \'quiet\', ' +
-                'add: \'value\' } isa Privacy {}>');
+                .to.be.equal('<Secret->Privacy { Secret: ' +
+                    '{ secret: \'quiet\', add: \'value\' } }>');
         });
 
         it('should throw a ReferenceError when trying to invoke an ' +

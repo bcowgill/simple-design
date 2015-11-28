@@ -38,10 +38,9 @@ class Cell extends Privacy
     }
 
     /** @override */
-    toDebugString (mine, className) {
-        const myDebug = super.toDebugString(mine || privates, className || category),
-            myParentDebug = super.toDebugString();
-        return `<${myDebug} isa ${myParentDebug}>`;
+    toDebugString (into, derivedPrivates, derivedClassName) {
+        return super.toDebugString(into, derivedPrivates || privates,
+            derivedClassName || category);
     }
 
     /** @override */
@@ -53,8 +52,8 @@ class Cell extends Privacy
     }
 
     /** @override */
-    _private (into, mine, className) {
-        into = super._private(into, mine || privates, className || category);
+    _private (into, derivedPrivates, derivedClassName) {
+        into = super._private(into, derivedPrivates || privates, derivedClassName || category);
         return super._private(into);
     }
 }
