@@ -171,7 +171,7 @@ describe('Privacy', function () {
             'unimplemented abstract/virtual method', function () {
 
             var self = this;
-            
+
             expect(function () {
                 self.secret.abstractUnimplemented();
             }).to.throw(ReferenceError);

@@ -2,7 +2,7 @@
   "private": true,
   "name": "simple-design",
   "version": "1.0.0",
-  "description": "work from book understanding the rules of simple design. requires ecmascript 6 version of nodejs",
+  "description": "Experimental work from the book Understanding the Four Rules of Simple Design by Corey Haines. Requires ECMAscript 6 version of nodejs or a transpiler.",
   "main": "app.js",
   "engines": {
     "node": "4.2.1"

@@ -4,6 +4,8 @@ Contains an infant form of a Privacy class to use WeakMaps in ECMAscript 6 to
 provide private member properties for classes while still providing the 
 ability to see the private data while debugging.
 
+This class framework is then used to implement classes for the Game of Life by Conway.
+
 Features of Privacy base class:
 
 1. WeakMaps for storing private data is memory leak safe.
