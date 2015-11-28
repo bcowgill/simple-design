@@ -40,7 +40,7 @@ class Privacy {
                 debugFormat.colorize);
         dump = dump.replace(/,\s+Privacy: {}/, '');
 
-        return `<${inherits} ${dump}>`;
+        return `<${inherits}\n${dump}>`;
     }
 
     get _className () {

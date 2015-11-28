@@ -16,6 +16,33 @@ Features of Privacy base class:
 1. _className property
 1. _abstractError() method to throw a ReferenceError if derived classes don't implement your abstract/virtual methods.
 
+_inherits() output for a derived class:
+
+    {
+        chain: [ 'Cypher', 'Secret', 'Privacy' ],
+        classes: {
+            Privacy: true, 
+            Secret: true, 
+            Cypher: true 
+        }
+    } 
+
+_private() output for a derived class:
+
+    {
+        Cypher: { cypher: 'hush', type: 'rot13' },
+        Privacy: {},
+        Secret: { secret: 'quiet', add: 'value' }
+    }
+
+toDebugString() output for a derived class:
+
+    <Cypher->Secret->Privacy
+    {
+        Cypher: { cypher: 'hush', type: 'rot13' },
+        Secret: { secret: 'quiet', add: 'value' }
+    }> 
+  
 ## Pre-requisites
 
 Install a recent version of [Node.js and Node package manager (npm)](http://nodejs.org) via your preferred method.

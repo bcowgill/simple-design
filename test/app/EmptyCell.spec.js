@@ -29,7 +29,7 @@ describe('EmptyCell', function () {
     it('an EmptyCell can format its private data nicely', function () {
 
         expect(this.cell.toDebugString())
-            .to.be.equal('<EmptyCell->Cell->Privacy { EmptyCell: {}, ' +
+            .to.be.equal('<EmptyCell->Cell->Privacy\n{ EmptyCell: {}, ' +
                 'Cell: { location: {} } }>');
 
     });

@@ -53,7 +53,7 @@ describe('World', function () {
     it('should be able to convert a world to a debug string', function () {
 
         expect(this.world.toDebugString())
-            .to.be.equal('<World->Privacy { World: { cells: [ [length]: 0 ] } }>');
+            .to.be.equal('<World->Privacy\n{ World: { cells: [ [length]: 0 ] } }>');
 
     });
 

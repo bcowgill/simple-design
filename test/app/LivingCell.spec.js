@@ -29,7 +29,7 @@ describe('LivingCell', function () {
     it('a LivingCell can format its private data nicely', function () {
 
         expect(this.cell.toDebugString())
-            .to.be.equal('<LivingCell->Cell->Privacy { LivingCell: {}, ' +
+            .to.be.equal('<LivingCell->Cell->Privacy\n{ LivingCell: {}, ' +
                 'Cell: { location: {} } }>');
     });
 

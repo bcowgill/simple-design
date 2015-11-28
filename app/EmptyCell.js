@@ -46,6 +46,7 @@ class EmptyCell extends Cell
         into = super._private(into, derivedPrivates || privates, derivedClassName || category);
         return super._private(into);
     }
+
 }
 
 _isFertileNeighborhood = function () {

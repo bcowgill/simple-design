@@ -56,6 +56,7 @@ class Cell extends Privacy
         into = super._private(into, derivedPrivates || privates, derivedClassName || category);
         return super._private(into);
     }
+
 }
 
 module.exports = Cell;
