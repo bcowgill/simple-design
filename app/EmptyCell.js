@@ -16,8 +16,10 @@ class EmptyCell extends Cell
         return _isFertileNeighborhood.call(this);
     }
 
-    toDebugString () {
-        return category + ' {}';
+    /** @override */
+    toDebugString (mine, className) {
+        return super.toDebugString(mine, className || category) +
+            ' isa ' + super.toDebugString();
     }
 }
 

@@ -6,6 +6,9 @@ describe('Cell', function () {
 
     beforeEach(function () {
         this.cell = new Cell();
+        this.cell.setStaticDebugFormat({
+            colorize: false
+        });
     });
 
     it('a cell is not alive by default', function () {
@@ -26,6 +29,13 @@ describe('Cell', function () {
         expect(function () {
             self.cell.isAliveInNextGeneration();
         }).to.throw('Abstract method invocation. Should be implemented by a derived class.');
+    });
+
+    it('a cell can format its private data nicely', function () {
+
+        expect(this.cell.toDebugString())
+            .to.be.equal('Cell { location: Location {} } isa Privacy {}');
+
     });
 
 });

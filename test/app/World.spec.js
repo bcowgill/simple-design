@@ -12,6 +12,9 @@ describe('World', function () {
 
     beforeEach(function () {
         this.world = WorldFactory.createEmpty();
+        this.world.setStaticDebugFormat({
+            colorize: false
+        });
     });
 
     it('a new world should be empty', function () {
@@ -44,6 +47,13 @@ describe('World', function () {
         this.world.setLivingAt(location);
 
         expect(this.world.isEmpty).to.be.false;
+
+    });
+
+    it('should be able to convert a world to a debug string', function () {
+
+        expect(this.world.toDebugString())
+            .to.be.equal('World { cells: [ [length]: 0 ] } isa Privacy {}');
 
     });
 });

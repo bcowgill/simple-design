@@ -2,13 +2,13 @@
 
 const category = 'Cell',
     LocationFactory = require('./Location'),
+    Privacy = require('./Privacy'),
     privates = new WeakMap();
 
-var _setPrivate;
-
-class Cell
+class Cell extends Privacy
 {
     constructor (location) {
+        super();
         privates.set(this, {
             location: location || LocationFactory.origin()
         });
@@ -33,20 +33,11 @@ class Cell
         return this.location.getNeighbors().length;
     }
 
-    toDebugString () {
-        const util = require('util'),
-            SHOW_HIDDEN = true,
-            INFINITE_DEPTH = null,
-            COLORIZE = true;
-        return category + ' ' + util.inspect(privates.get(this),
-                SHOW_HIDDEN, INFINITE_DEPTH, COLORIZE);
+    /** @override */
+    toDebugString (mine, className) {
+        return super.toDebugString(mine || privates, className || category) +
+            ' isa ' + super.toDebugString();
     }
 }
-
-_setPrivate = function (key, value) {
-    const _privates = privates.get(this);
-    _privates[key] = value;
-    return this;
-};
 
 module.exports = Cell;

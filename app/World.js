@@ -1,16 +1,17 @@
 'use strict';
 
 const category = 'World',
+    Privacy = require('./Privacy'),
     LivingCell = require('./LivingCell'),
     _ = require('underscore'),
     privates = new WeakMap();
 
-var _getCellAt,
-    _setPrivate;
+var _getCellAt;
 
-class World
+class World extends Privacy
 {
     constructor () {
+        super();
         privates.set(this, {
             cells: []
         });
@@ -46,13 +47,10 @@ class World
         return this;
     }
 
-    toDebugString () {
-        const util = require('util'),
-            SHOW_HIDDEN = true,
-            INFINITE_DEPTH = null,
-            COLORIZE = true;
-        return category + ' ' + util.inspect(privates.get(this),
-                SHOW_HIDDEN, INFINITE_DEPTH, COLORIZE);
+    /** @override */
+    toDebugString (mine, className) {
+        return super.toDebugString(mine || privates, className || category) +
+            ' isa ' + super.toDebugString();
     }
 }
 
@@ -62,12 +60,6 @@ _getCellAt = function (location) {
             return location.isSame(cell.location);
         });
     return cell;
-};
-
-_setPrivate = function (key, value) {
-    const _privates = privates.get(this);
-    _privates[key] = value;
-    return this;
 };
 
 class WorldFactory {

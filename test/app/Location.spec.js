@@ -4,6 +4,12 @@ describe('Location', function () {
 
     const LocationFactory = require('.').LocationFactory;
 
+    before(function () {
+        (LocationFactory.origin()).setStaticDebugFormat({
+            colorize: false
+        });
+    });
+
     describe('LocationFactory', function () {
 
         it('should be able to create a Location at the origin', function () {
@@ -115,7 +121,7 @@ describe('Location', function () {
             const location = LocationFactory.origin();
 
             expect(location.toDebugString())
-                .to.be.equal('Location { x: \u001b[33m0\u001b[39m, y: \u001b[33m0\u001b[39m }');
+                .to.be.equal('Location { x: 0, y: 0 } isa Privacy {}');
 
         });
     });

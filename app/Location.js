@@ -1,13 +1,15 @@
 'use strict';
 
 const category = 'Location',
+    Privacy = require('./Privacy'),
     privates = new WeakMap();
 
 var _makeWithOffset, _v;
 
-class Location
+class Location extends Privacy
 {
     constructor (x, y) {
+        super();
         privates.set(this, {
             x: _v(x),
             y: _v(y)
@@ -46,13 +48,10 @@ class Location
         ];
     }
 
-    toDebugString () {
-        const util = require('util'),
-            SHOW_HIDDEN = true,
-            INFINITE_DEPTH = null,
-            COLORIZE = true;
-        return category + ' ' + util.inspect(privates.get(this),
-                SHOW_HIDDEN, INFINITE_DEPTH, COLORIZE);
+    /** @override */
+    toDebugString (mine, className) {
+        return super.toDebugString(mine || privates, className || category) +
+            ' isa ' + super.toDebugString();
     }
 }
 

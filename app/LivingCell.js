@@ -21,8 +21,10 @@ class LivingCell extends Cell
         return _isStableNeighborhood.call(this);
     }
 
-    toDebugString () {
-        return category + ' {}';
+    /** @override */
+    toDebugString (mine, className) {
+        return super.toDebugString(mine, className || category) +
+            ' isa ' + super.toDebugString();
     }
 }
 
