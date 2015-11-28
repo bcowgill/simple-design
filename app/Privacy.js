@@ -1,4 +1,4 @@
-/* jshint maxcomplexity: 3 */
+/* jshint maxcomplexity: 4 */
 'use strict';
 
 const category = 'Privacy',
@@ -45,6 +45,14 @@ class Privacy {
         return this;
     }
 
+    /** @abstract */
+    _private (into, privates, className) {
+        into = into || {};
+        className = className || category;
+        privates = privates ? privates.get(this) : {};
+        into[className] = JSON.parse(JSON.stringify(privates));
+        return into;
+    }
 }
 
 module.exports = Privacy;

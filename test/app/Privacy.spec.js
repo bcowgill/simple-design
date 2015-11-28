@@ -1,6 +1,7 @@
 'use strict';
 
 const Privacy = require('.').Privacy,
+    util = require('util'),
     category = 'Secret',
     secrets = new WeakMap(),
     debugFormat = (new Privacy()).getStaticDebugFormat();
@@ -8,7 +9,7 @@ const Privacy = require('.').Privacy,
 describe('Privacy', function () {
 
     class Secret extends Privacy {
-        /* jshint maxcomplexity: 3 */
+        /* jshint maxcomplexity: 4 */
         constructor (secret) {
             super();
             secrets.set(this, {
@@ -28,6 +29,12 @@ describe('Privacy', function () {
             return super.toDebugString(privates || secrets, className || category) +
                 ' isa ' + super.toDebugString();
         }
+
+        /** @override */
+        _private (into, privates, className) {
+            into = super._private(into, privates || secrets, className || category);
+            return super._private(into);
+        }
     }
 
     beforeEach(function () {
@@ -39,9 +46,19 @@ describe('Privacy', function () {
         });
     });
 
+    it('should be unable to see private data', function () {
+        expect(util.inspect(this.object))
+            .to.be.equal('Privacy {}');
+    });
+
     it('should format privates in a nice debug string', function () {
         expect(this.object.toDebugString(this.privates))
             .to.be.equal('Privacy { private: true }');
+    });
+
+    it('should provide cloned privates for debugger inspection', function () {
+        expect(this.object._private({}, this.privates))
+            .to.deep.equal({ Privacy: { private: true } });
     });
 
     it('should answer with default static debug format', function () {
@@ -71,6 +88,14 @@ describe('Privacy', function () {
                 'added: true }');
     });
 
+    it('should be unable to see private data for derived classes', function () {
+
+        var secret = new Secret('quiet');
+
+        expect(util.inspect(secret))
+            .to.be.equal('Secret {}');
+    });
+
     it('should set privates for derived classes', function () {
 
         var secret = new Secret('quiet');
@@ -80,4 +105,13 @@ describe('Privacy', function () {
             .to.be.equal('Secret { secret: \'quiet\', ' +
                 'add: \'value\' } isa Privacy {}');
     });
+
+    it('derived class should provide cloned privates for debugger inspection', function () {
+
+        var secret = new Secret('quiet');
+
+        expect(secret._private())
+            .to.deep.equal({ Secret: { secret: 'quiet', add: 'value' }, Privacy: {} });
+    });
+
 });
