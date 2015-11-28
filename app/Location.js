@@ -1,6 +1,7 @@
 'use strict';
 
 const category = 'Location',
+    noop = require('node-noop').noop,
     Privacy = require('./Privacy'),
     privates = new WeakMap();
 
@@ -16,21 +17,25 @@ class Location extends Privacy
         });
     }
 
-    get x () {
-        return privates.get(this).x;
-    }
-
-    get y () {
-        return privates.get(this).y;
-    }
-
     toString () {
-        return `(${this.x}, ${this.y})`;
+        const _private = privates.get(this);
+        return `(${_private.x}, ${_private.y})`;
     }
 
-    isSame (location) {
-        return this.x === location.x &&
-            this.y === location.y;
+    ifSameAs (location, callIfSame, callIfDiffers) {
+        callIfSame = callIfSame || noop;
+        callIfDiffers = callIfDiffers || noop;
+
+        const _private = privates.get(this);
+        const _their = privates.get(location);
+        if (_private.x === _their.x &&
+            _private.y === _their.y) {
+            callIfSame();
+        }
+        else
+        {
+            callIfDiffers();
+        }
     }
 
     getNeighbors () {
@@ -70,7 +75,8 @@ class Location extends Privacy
 }
 
 _makeWithOffset = function (x, y) {
-    return new Location(this.x + x,  this.y + y);
+    const _private = privates.get(this);
+    return new Location(_private.x + x,  _private.y + y);
 };
 
 // don't override 0 as a default value!

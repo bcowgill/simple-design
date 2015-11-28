@@ -261,7 +261,7 @@ describe('Privacy', function () {
             console.log('\n', this.cypher._inherits(), '\n');
             console.log('\n', this.cypher.toDebugString(), '\n');
             */
-            
+
             expect(this.cypher._private())
                 .to.be.deep.equal({
                 Privacy: {},
