@@ -24,6 +24,11 @@ describe('Privacy', function () {
             return secrets.get(this).secret;
         }
 
+        /** @abstract */
+        abstractUnimplemented () {
+            this._abstractError();
+        }
+
         /** @override */
         toDebugString (privates, className) {
             return super.toDebugString(privates || secrets, className || category) +
@@ -113,27 +118,26 @@ describe('Privacy', function () {
     });
 
     describe('Secret isa Private', function () {
+
+        beforeEach(function () {
+            this.secret = new Secret('quiet');
+        });
+
         it('should be unable to see private data for derived classes', function () {
 
-            var secret = new Secret('quiet');
-
-            expect(util.inspect(secret))
+            expect(util.inspect(this.secret))
                 .to.be.equal('Secret {}');
         });
 
         it('should provide class name for derived classes', function () {
 
-            var secret = new Secret('quiet');
-
-            expect(secret._className)
+            expect(this.secret._className)
                 .to.deep.equal('Secret');
         });
 
         it('should provide inheritance information for derived classes', function () {
 
-            var secret = new Secret('quiet');
-
-            expect(secret._inherits())
+            expect(this.secret._inherits())
                 .to.be.deep.equal({
                 chain: [ 'Secret', 'Privacy' ],
                 classes: {
@@ -145,9 +149,7 @@ describe('Privacy', function () {
 
         it('derived class should provide cloned privates for debugger inspection', function () {
 
-            var secret = new Secret('quiet');
-
-            expect(secret._private())
+            expect(this.secret._private())
                 .to.be.deep.equal({
                     Privacy: {},
                     Secret: {
@@ -159,14 +161,25 @@ describe('Privacy', function () {
 
         it('should set privates for derived classes', function () {
 
-            var secret = new Secret('quiet');
-
-            expect(secret.secret).to.be.equal('quiet');
-            expect(secret.toDebugString())
+            expect(this.secret.secret).to.be.equal('quiet');
+            expect(this.secret.toDebugString())
                 .to.be.equal('Secret { secret: \'quiet\', ' +
                 'add: \'value\' } isa Privacy {}');
         });
 
-    });
+        it('should throw a ReferenceError when trying to invoke an ' +
+            'unimplemented abstract/virtual method', function () {
 
+            var self = this;
+            
+            expect(function () {
+                self.secret.abstractUnimplemented();
+            }).to.throw(ReferenceError);
+
+            expect(function () {
+                self.secret.abstractUnimplemented();
+            }).to.throw('Abstract method invocation. Should be implemented by a derived class.');
+
+        });
+    });
 });

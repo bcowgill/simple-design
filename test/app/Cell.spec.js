@@ -29,6 +29,7 @@ describe('Cell', function () {
         expect(function () {
             self.cell.isAliveInNextGeneration();
         }).to.throw('Abstract method invocation. Should be implemented by a derived class.');
+
     });
 
     it('a cell has an abstract property glyph ' +

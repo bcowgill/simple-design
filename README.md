@@ -1,4 +1,18 @@
-# Dictionary service API in nodejs
+# Experiments from reading the book "Understanding the Four Rules of Simple Design" by Corey Haines 
+
+Contains an infant form of a Privacy class to use WeakMaps in ECMAscript 6 to 
+provide private member properties for classes while still providing the 
+ability to see the private data while debugging.
+
+Features of Privacy base class:
+
+1. WeakMaps for storing private data is memory leak safe.
+1. ECMAscript 6 class keyword used.
+1. toDebugString() method for dumping object info when debugging.
+1. _inherits() method to get inheritance chain and inhertied classes.
+1. _private() method to get a read only copy of private data for debugging.
+1. _className property
+1. _abstractError() method to throw a ReferenceError if derived classes don't implement your abstract/virtual methods.
 
 ## Pre-requisites
 
@@ -12,7 +26,7 @@ Install nvm and then install node version 4.2.1 or newer for ECMA6 support. (htt
 
 ## License
 
-TBD
+Unlicense see LICENCE file or http://unlicense.org
 
 ## Setup
 
@@ -22,44 +36,6 @@ In the project directory, launch:
     npm install
 
 You'll need to do this once or when dependencies change.
-
-## Start the service
-
-### in development mode
-
-    npm run serve
-    npm run debug
-
-the server will be restarted by **nodemon** when source files change.
-using debug will show the output of all debug() statements within the code
-
-### in production mode:
-
-    npm start
-    npm restart
-    npm stop
-
-the server will be kept alive by the **forever** monitor
-
-Production logs are configured here:
-
-[production log config](https://github.com/workshare/location-nodejs/blob/master/config/production.json)
-
-## Configuring the service
-
-### configuration files are in **config/** directory and are quite flexible
-
-* [config files](https://github.com/lorenwest/node-config/wiki/Configuration-Files)
-* [env vars](https://github.com/lorenwest/node-config/wiki/Environment-Variables)
-
-in particular, you can create environment, host, instance and worker
-specific override files as your needs change.
-
-### How to configure the **log4js** files:
-
-* [log4js configuration](https://github.com/nomiddlename/log4js-node#configuration)
-* [log4js appenders](https://github.com/nomiddlename/log4js-node/wiki/Appenders)
-* [log4js layouts](https://github.com/nomiddlename/log4js-node/wiki/Layouts)
 
 ## Test
 
@@ -98,14 +74,6 @@ or Opera debugger to debug your code.
     npm run debugger
     npm run debuggertest
 
-## Performance
-
-    npm start
-    npm run performance
-
-will run a performance test against your server using the list file test/urls.lst
-
-Logs will show on the console so no tailing needed.
 
 
 

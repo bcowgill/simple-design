@@ -2,7 +2,7 @@
   "private": true,
   "name": "simple-design",
   "version": "1.0.0",
-  "description": "work from book understanding the rules of simple design",
+  "description": "work from book understanding the rules of simple design. requires ecmascript 6 version of nodejs",
   "main": "app.js",
   "engines": {
     "node": "4.2.1"
@@ -25,10 +25,10 @@
     "performance": "siege --internet --file test/urls.lst --concurrent 100 --time 1M"
   },
   "author": "Brent Cowgill",
-  "license": "ISC",
+  "license": "Unlicense",
   "repository": {
     "type": "git",
-    "url": "https://github.com/workshare/node-dictionary"
+    "url": "https://github.com/bcowgill/simple-design"
   },
   "dependencies": {
     "chalk": "^1.1.1",
