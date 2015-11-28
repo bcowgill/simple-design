@@ -49,8 +49,9 @@ class World extends Privacy
 
     /** @override */
     toDebugString (mine, className) {
-        return super.toDebugString(mine || privates, className || category) +
-            ' isa ' + super.toDebugString();
+        const myDebug = super.toDebugString(mine || privates, className || category),
+            myParentDebug = super.toDebugString();
+        return `<${myDebug} isa ${myParentDebug}>`;
     }
 
     /** @override */

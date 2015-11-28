@@ -17,8 +17,9 @@ class DeadCell extends EmptyCell
     /** @override */
     toDebugString (mine, className) {
         const privates = void 0; // no private data yet
-        return super.toDebugString(mine || privates, className || category) +
-            ' isa ' + super.toDebugString();
+        const myDebug = super.toDebugString(mine || privates, className || category),
+            myParentDebug = super.toDebugString();
+        return `<${myDebug} isa ${myParentDebug}>`;
     }
 
     /** @override */

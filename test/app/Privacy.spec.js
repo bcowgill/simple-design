@@ -31,8 +31,9 @@ describe('Privacy', function () {
 
         /** @override */
         toDebugString (privates, className) {
-            return super.toDebugString(privates || secrets, className || category) +
-                ' isa ' + super.toDebugString();
+            const myDebug = super.toDebugString(privates || secrets, className || category),
+                myParentDebug = super.toDebugString();
+            return `<${myDebug} isa ${myParentDebug}>`;
         }
 
         /** @override */
@@ -163,8 +164,8 @@ describe('Privacy', function () {
 
             expect(this.secret.secret).to.be.equal('quiet');
             expect(this.secret.toDebugString())
-                .to.be.equal('Secret { secret: \'quiet\', ' +
-                'add: \'value\' } isa Privacy {}');
+                .to.be.equal('<Secret { secret: \'quiet\', ' +
+                'add: \'value\' } isa Privacy {}>');
         });
 
         it('should throw a ReferenceError when trying to invoke an ' +

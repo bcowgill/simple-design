@@ -53,7 +53,7 @@ describe('World', function () {
     it('should be able to convert a world to a debug string', function () {
 
         expect(this.world.toDebugString())
-            .to.be.equal('World { cells: [ [length]: 0 ] } isa Privacy {}');
+            .to.be.equal('<World { cells: [ [length]: 0 ] } isa Privacy {}>');
 
     });
 
@@ -71,6 +71,17 @@ describe('World', function () {
             classes: {
                 World: true,
                 Privacy: true
+            }
+        });
+    });
+
+    it('a World class should provide cloned privates for debugger inspection', function () {
+
+        expect(this.world._private())
+            .to.be.deep.equal({
+            Privacy: {},
+            World: {
+                cells: []
             }
         });
     });

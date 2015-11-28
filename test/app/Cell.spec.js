@@ -55,7 +55,7 @@ describe('Cell', function () {
     it('a cell can format its private data nicely', function () {
 
         expect(this.cell.toDebugString())
-            .to.be.equal('Cell { location: Location {} } isa Privacy {}');
+            .to.be.equal('<Cell { location: Location {} } isa Privacy {}>');
 
     });
 
@@ -67,6 +67,17 @@ describe('Cell', function () {
             classes: {
                 Cell: true,
                 Privacy: true
+            }
+        });
+    });
+
+    it('a cell class should provide cloned privates for debugger inspection', function () {
+
+        expect(this.cell._private())
+            .to.be.deep.equal({
+            Privacy: {},
+            Cell: {
+                location: {}
             }
         });
     });

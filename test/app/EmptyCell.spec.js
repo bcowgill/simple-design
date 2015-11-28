@@ -29,8 +29,8 @@ describe('EmptyCell', function () {
     it('an EmptyCell can format its private data nicely', function () {
 
         expect(this.cell.toDebugString())
-            .to.be.equal('EmptyCell { location: Location {} } isa Privacy {} ' +
-            'isa Cell { location: Location {} } isa Privacy {}');
+            .to.be.equal('<<EmptyCell { location: Location {} } isa Privacy {}> ' +
+                'isa <Cell { location: Location {} } isa Privacy {}>>');
 
     });
 
@@ -56,6 +56,20 @@ describe('EmptyCell', function () {
                 EmptyCell: true,
                 Cell: true,
                 Privacy: true
+            }
+        });
+    });
+
+    it('a EmptyCell class should provide cloned privates for debugger inspection', function () {
+
+        expect(this.cell._private())
+            .to.be.deep.equal({
+            Privacy: {},
+            EmptyCell: {
+                location: {}
+            },
+            Cell: {
+                location: {}
             }
         });
     });

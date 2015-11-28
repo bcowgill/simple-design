@@ -29,8 +29,8 @@ describe('LivingCell', function () {
     it('a LivingCell can format its private data nicely', function () {
 
         expect(this.cell.toDebugString())
-            .to.be.equal('LivingCell { location: Location {} } isa Privacy {} ' +
-                'isa Cell { location: Location {} } isa Privacy {}');
+            .to.be.equal('<<LivingCell { location: Location {} } isa Privacy {}> ' +
+                'isa <Cell { location: Location {} } isa Privacy {}>>');
 
     });
 
@@ -56,6 +56,20 @@ describe('LivingCell', function () {
                 LivingCell: true,
                 Cell: true,
                 Privacy: true
+            }
+        });
+    });
+
+    it('a LivingCell class should provide cloned privates for debugger inspection', function () {
+
+        expect(this.cell._private())
+            .to.be.deep.equal({
+            Privacy: {},
+            LivingCell: {
+                location: {}
+            },
+            Cell: {
+                location: {}
             }
         });
     });
