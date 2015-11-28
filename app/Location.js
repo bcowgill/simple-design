@@ -36,6 +36,7 @@ class Location extends Privacy
         {
             callIfDiffers();
         }
+        return this;
     }
 
     getNeighbors () {
@@ -104,6 +105,8 @@ class LocationFactory {
         return new Location(Math.floor(size * Math.random() + 0.5),
             Math.floor(size * Math.random() + 0.5));
     }
+
+    get _className () { return 'LocationFactory'; }
 }
 
 module.exports = new LocationFactory();
