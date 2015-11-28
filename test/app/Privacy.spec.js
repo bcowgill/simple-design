@@ -31,6 +31,14 @@ describe('Privacy', function () {
         }
 
         /** @override */
+        _inherits (into) {
+            into = super._inherits(into);
+            into.chain.unshift(category);
+            into.classes[category] = true;
+            return into;
+        }
+
+        /** @override */
         _private (into, privates, className) {
             into = super._private(into, privates || secrets, className || category);
             return super._private(into);
@@ -46,72 +54,119 @@ describe('Privacy', function () {
         });
     });
 
-    it('should be unable to see private data', function () {
-        expect(util.inspect(this.object))
-            .to.be.equal('Privacy {}');
-    });
+    describe('Privacy', function () {
+        it('should be unable to see private data', function () {
+            expect(util.inspect(this.object))
+                .to.be.equal('Privacy {}');
+        });
 
-    it('should format privates in a nice debug string', function () {
-        expect(this.object.toDebugString(this.privates))
-            .to.be.equal('Privacy { private: true }');
-    });
+        it('should format privates in a nice debug string', function () {
+            expect(this.object.toDebugString(this.privates))
+                .to.be.equal('Privacy { private: true }');
+        });
 
-    it('should provide cloned privates for debugger inspection', function () {
-        expect(this.object._private({}, this.privates))
-            .to.deep.equal({ Privacy: { private: true } });
-    });
+        it('should provide inheritance information', function () {
 
-    it('should answer with default static debug format', function () {
-        expect(debugFormat)
-            .to.be.deep.equal({
-            depth: null,
-            showHidden: true,
-            colorize: true
+            expect(this.object._inherits())
+                .to.be.deep.equal({
+                    chain: [ 'Privacy' ],
+                    classes: { 'Privacy': true }
+                });
+        });
+
+        it('should provide class name', function () {
+            expect(this.object._className)
+                .to.deep.equal('Privacy');
+        });
+
+        it('should provide cloned privates for debugger inspection', function () {
+            expect(this.object._private({}, this.privates))
+                .to.deep.equal({ Privacy: { private: true } });
+        });
+
+        it('should answer with default static debug format', function () {
+            expect(debugFormat)
+                .to.be.deep.equal({
+                depth: null,
+                showHidden: true,
+                colorize: true
+            });
+        });
+
+        it('should have set static debug format', function () {
+            expect(this.object.getStaticDebugFormat())
+                .to.be.deep.equal({
+                    depth: null,
+                    showHidden: true,
+                    colorize: false
+                });
+        });
+
+        it('should set a private value', function () {
+
+            this.object._setPrivate(this.privates, 'added', true);
+
+            expect(this.object.toDebugString(this.privates))
+                .to.be.equal('Privacy { private: true, ' +
+                    'added: true }');
         });
     });
 
-    it('should have set static debug format', function () {
-        expect(this.object.getStaticDebugFormat())
-            .to.be.deep.equal({
-                depth: null,
-                showHidden: true,
-                colorize: false
+    describe('Secret isa Private', function () {
+        it('should be unable to see private data for derived classes', function () {
+
+            var secret = new Secret('quiet');
+
+            expect(util.inspect(secret))
+                .to.be.equal('Secret {}');
+        });
+
+        it('should provide class name for derived classes', function () {
+
+            var secret = new Secret('quiet');
+
+            expect(secret._className)
+                .to.deep.equal('Secret');
+        });
+
+        it('should provide inheritance information for derived classes', function () {
+
+            var secret = new Secret('quiet');
+
+            expect(secret._inherits())
+                .to.be.deep.equal({
+                chain: [ 'Secret', 'Privacy' ],
+                classes: {
+                    Secret: true,
+                    Privacy: true
+                }
             });
-    });
+        });
 
-    it('should set a private value', function () {
+        it('derived class should provide cloned privates for debugger inspection', function () {
 
-        this.object._setPrivate(this.privates, 'added', true);
+            var secret = new Secret('quiet');
 
-        expect(this.object.toDebugString(this.privates))
-            .to.be.equal('Privacy { private: true, ' +
-                'added: true }');
-    });
+            expect(secret._private())
+                .to.be.deep.equal({
+                    Privacy: {},
+                    Secret: {
+                        secret: 'quiet',
+                        add: 'value'
+                    }
+                });
+        });
 
-    it('should be unable to see private data for derived classes', function () {
+        it('should set privates for derived classes', function () {
 
-        var secret = new Secret('quiet');
+            var secret = new Secret('quiet');
 
-        expect(util.inspect(secret))
-            .to.be.equal('Secret {}');
-    });
-
-    it('should set privates for derived classes', function () {
-
-        var secret = new Secret('quiet');
-
-        expect(secret.secret).to.be.equal('quiet');
-        expect(secret.toDebugString())
-            .to.be.equal('Secret { secret: \'quiet\', ' +
+            expect(secret.secret).to.be.equal('quiet');
+            expect(secret.toDebugString())
+                .to.be.equal('Secret { secret: \'quiet\', ' +
                 'add: \'value\' } isa Privacy {}');
-    });
+        });
 
-    it('derived class should provide cloned privates for debugger inspection', function () {
-
-        var secret = new Secret('quiet');
-
-        expect(secret._private())
-            .to.deep.equal({ Secret: { secret: 'quiet', add: 'value' }, Privacy: {} });
     });
 
 });

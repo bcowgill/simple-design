@@ -31,11 +31,43 @@ describe('Cell', function () {
         }).to.throw('Abstract method invocation. Should be implemented by a derived class.');
     });
 
+    it('a cell has an abstract property glyph ' +
+        'which throws a ReferenceError if called', function () {
+
+        const self = this;
+
+        expect(function () {
+            self.cell.glyph;
+        }).to.throw(ReferenceError);
+
+        expect(function () {
+            self.cell.glyph;
+        }).to.throw('Abstract method invocation. Should be implemented by a derived class.');
+    });
+
+    it('should provide class name', function () {
+
+        expect(this.cell._className)
+            .to.deep.equal('Cell');
+    });
+
     it('a cell can format its private data nicely', function () {
 
         expect(this.cell.toDebugString())
             .to.be.equal('Cell { location: Location {} } isa Privacy {}');
 
+    });
+
+    it('a cell has correct inheritance information', function () {
+
+        expect(this.cell._inherits())
+            .to.be.deep.equal({
+            chain: [ 'Cell', 'Privacy' ],
+            classes: {
+                Cell: true,
+                Privacy: true
+            }
+        });
     });
 
 });

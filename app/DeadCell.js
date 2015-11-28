@@ -1,11 +1,9 @@
 'use strict';
 
-const category = 'LivingCell',
-    Cell = require('./Cell');
+const category = 'DeadCell',
+    EmptyCell = require('./EmptyCell');
 
-var _isStableNeighborhood;
-
-class LivingCell extends Cell
+class DeadCell extends EmptyCell
 {
     constructor (location) {
         super(location);
@@ -13,17 +11,7 @@ class LivingCell extends Cell
 
     /** @override */
     get glyph () {
-        return '☻'; // U+263B BLACK SMILING FACE
-    }
-
-    /** @override */
-    get isAlive () {
-        return true;
-    }
-
-    /** @override */
-    isAliveInNextGeneration () {
-        return _isStableNeighborhood.call(this);
+        return '☠'; // U+2620 [OtherSymbol] SKULL AND CROSSBONES
     }
 
     /** @override */
@@ -49,9 +37,4 @@ class LivingCell extends Cell
     }
 }
 
-_isStableNeighborhood = function () {
-    const neighbors = this.getNeighborCount();
-    return neighbors === 2 || neighbors === 3;
-};
-
-module.exports = LivingCell;
+module.exports = DeadCell;

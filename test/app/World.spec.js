@@ -56,4 +56,23 @@ describe('World', function () {
             .to.be.equal('World { cells: [ [length]: 0 ] } isa Privacy {}');
 
     });
+
+    it('should provide class name', function () {
+
+        expect(this.world._className)
+            .to.deep.equal('World');
+    });
+
+    it('a World has correct inheritance information', function () {
+
+        expect(this.world._inherits())
+            .to.be.deep.equal({
+            chain: [ 'World', 'Privacy' ],
+            classes: {
+                World: true,
+                Privacy: true
+            }
+        });
+    });
+
 });

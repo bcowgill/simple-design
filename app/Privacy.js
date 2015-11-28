@@ -38,11 +38,16 @@ class Privacy {
                 debugFormat.colorize);
     }
 
-    /** @protected */
-    _setPrivate (privates, key, value) {
-        const _privates = privates.get(this);
-        _privates[key] = value;
-        return this;
+    get _className () {
+        return this._inherits().chain[0];
+    }
+
+    /** @abstract */
+    _inherits (into) {
+        into = into || { chain: [], classes: {} };
+        into.chain.unshift(category);
+        into.classes[category] = true;
+        return into;
     }
 
     /** @abstract */
@@ -53,6 +58,14 @@ class Privacy {
         into[className] = JSON.parse(JSON.stringify(privates));
         return into;
     }
+
+    /** @protected */
+    _setPrivate (privates, key, value) {
+        const _privates = privates.get(this);
+        _privates[key] = value;
+        return this;
+    }
+
 }
 
 module.exports = Privacy;

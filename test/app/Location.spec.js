@@ -124,5 +124,28 @@ describe('Location', function () {
                 .to.be.equal('Location { x: 0, y: 0 } isa Privacy {}');
 
         });
+
+        it('should provide class name', function () {
+
+            const location = LocationFactory.origin();
+
+            expect(location._className)
+                .to.deep.equal('Location');
+        });
+
+        it('a Location has correct inheritance information', function () {
+
+            const location = LocationFactory.origin();
+
+            expect(location._inherits())
+                .to.be.deep.equal({
+                chain: [ 'Location', 'Privacy' ],
+                classes: {
+                    Location: true,
+                    Privacy: true
+                }
+            });
+        });
+
     });
 });

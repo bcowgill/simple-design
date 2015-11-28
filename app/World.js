@@ -52,6 +52,20 @@ class World extends Privacy
         return super.toDebugString(mine || privates, className || category) +
             ' isa ' + super.toDebugString();
     }
+
+    /** @override */
+    _inherits (into) {
+        into = super._inherits(into);
+        into.chain.unshift(category);
+        into.classes[category] = true;
+        return into;
+    }
+
+    /** @override */
+    _private (into, mine, className) {
+        into = super._private(into, mine || privates, className || category);
+        return super._private(into);
+    }
 }
 
 _getCellAt = function (location) {

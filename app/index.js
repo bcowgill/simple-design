@@ -5,6 +5,7 @@ module.exports = {
     Cell: {
         Base: require('./Cell'),
         Empty: require('./EmptyCell'),
+        Dead: require('./DeadCell'),
         Living: require('./LivingCell')
     }
 };
