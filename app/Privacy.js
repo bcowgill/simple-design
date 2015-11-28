@@ -66,6 +66,12 @@ class Privacy {
         return this;
     }
 
+    /** @protected */
+    _abstractError () {
+        throw new ReferenceError('Abstract method invocation. ' +
+            'Should be implemented by a derived class.');
+    }
+
 }
 
 module.exports = Privacy;

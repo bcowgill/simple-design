@@ -20,14 +20,12 @@ class Cell extends Privacy
 
     /** @abstract */
     get glyph () {
-        throw new ReferenceError('Abstract method invocation. ' +
-            'Should be implemented by a derived class.');
+        return this._abstractError();
     }
 
     /** @abstract */
     isAliveInNextGeneration () {
-        throw new ReferenceError('Abstract method invocation. ' +
-            'Should be implemented by a derived class.');
+        return this._abstractError();
     }
 
     get location () {
