@@ -1,4 +1,5 @@
 module.exports = {
+    Privacy: require('./Privacy'),
     WorldFactory: require('./World'),
     LocationFactory: require('./Location'),
     Cell: {
