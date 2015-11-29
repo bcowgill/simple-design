@@ -2,161 +2,12 @@
 
 const Privacy = require('.').Privacy,
     util = require('util'),
-    category = 'Secret',
-    secrets = new WeakMap(),
-    cypher = new WeakMap(),
-    secretheight = new WeakMap(),
+    Secret = require('./Classes/Secret'),
+    Cypher = require('./Classes/Cypher'),
+    SecretHeight = require('./Classes/SecretHeight'),
     debugFormat = (new Privacy()).getStaticDebugFormat();
 
 describe('Privacy', function () {
-
-    class Secret extends Privacy {
-        /* jshint maxcomplexity: 4 */
-        constructor (secret) {
-            super();
-            secrets.set(this, {
-                secret: secret || 'shhh'
-            });
-
-            this._setPrivate(secrets, 'add', 'value');
-            return this;
-        }
-
-        get secret () {
-            return secrets.get(this).secret;
-        }
-
-        /** @abstract */
-        abstractUnimplemented () {
-            this._abstractError();
-        }
-
-        /** @override */
-        toDebugString (into, derivedPrivates, derivedClassName) {
-            return super.toDebugString(into,
-                derivedPrivates || secrets, derivedClassName || category);
-        }
-
-        /** @override */
-        _inherits (into) {
-            into = super._inherits(into);
-            into.chain.unshift(category);
-            into.classes[category] = true;
-            return into;
-        }
-
-        /** @override */
-        _private (into, derivedPrivates, derivedClassName) {
-            into = super._private(into, derivedPrivates || secrets, derivedClassName || category);
-            return super._private(into);
-        }
-    }
-
-    class Cypher extends Secret {
-        /* jshint maxcomplexity: 4 */
-        constructor (secret, cypherType) {
-            super(secret);
-            cypher.set(this, {
-                cypher: cypherType || 'shhh'
-            });
-
-            this._setPrivate(cypher, 'type', 'rot13');
-            return this;
-        }
-
-        get cypher () {
-            return cypher.get(this).cypher;
-        }
-
-        /** @override */
-        toDebugString (into, derivedPrivates, derivedClassName) {
-            return super.toDebugString(into,
-                derivedPrivates || cypher, derivedClassName || 'Cypher');
-        }
-
-        /** @override */
-        _inherits (into) {
-            into = super._inherits(into);
-            into.chain.unshift('Cypher');
-            into.classes.Cypher = true;
-            return into;
-        }
-
-        /** @override */
-        _private (into, derivedPrivates, derivedClassName) {
-            into = super._private(into, derivedPrivates || cypher, derivedClassName || 'Cypher');
-            return super._private(into);
-        }
-    }
-
-    // Cached Functional Mixin pattern
-    // https://javascriptweblog.wordpress.com/2011/05/31/a-fresh-look-at-javascript-mixins/
-    const applyHeightMixin = (function HeightMixinDecorator () {
-        const className = 'HeightMixin',
-            privates = new WeakMap();
-
-        /* jshint -W040 */ // Possible strict violation.
-        function initHeightMixin (height) {
-            privates.set(this, {
-                height: height
-            });
-        }
-
-        function height () {
-            return privates.get(this).height + 'mm';
-        }
-        /* jshint +W040 */ // Possible strict violation.
-
-        return function HeightMixin () {
-            // TODO non-enumerable?
-            this[className] = {
-                init: initHeightMixin,
-                _private: function (into, derivedPrivates, derivedClassName) {
-                    Privacy.prototype._private.call(this, into,
-                        derivedPrivates || privates, derivedClassName || className);
-                }
-            };
-            Object.defineProperty(this[className], '_className', {
-                value: className,
-                enumerable: true,
-                configurable: false,
-                writable: false
-            });
-            this.height = height;
-            return this;
-        };
-    })();
-
-    class SecretHeight extends Secret {
-        constructor (secret, heightMM) {
-            super(secret);
-            this.HeightMixin.init.call(this, heightMM);
-            secretheight.set(this, {
-                relative: 'absolute'
-            });
-            return this;
-        }
-
-        /** @override */
-        _inherits (into) {
-            into = super._inherits(into);
-            into.chain.push(':HeightMixin');
-            into.chain.unshift('SecretHeight');
-            into.classes.SecretHeight = true;
-            into.classes.HeightMixin = true;
-            return into;
-        }
-
-        /** @override */
-        _private (into, derivedPrivates, derivedClassName) {
-            into = super._private(into,
-                derivedPrivates || secretheight, derivedClassName || 'SecretHeight');
-            this.HeightMixin._private.call(this, into);
-            return super._private(into);
-        }
-
-    }
-    applyHeightMixin.call(SecretHeight.prototype);
 
     beforeEach(function () {
         this.privates = new WeakMap();
@@ -294,7 +145,7 @@ describe('Privacy', function () {
     });
     
     describe('Cypher isa Secret', function () {
-        
+
         beforeEach(function () {
             this.cypher = new Cypher('quiet', 'hush');
         });
