@@ -5,6 +5,7 @@ const Privacy = require('.').Privacy,
     category = 'Secret',
     secrets = new WeakMap(),
     cypher = new WeakMap(),
+    secretheight = new WeakMap(),
     debugFormat = (new Privacy()).getStaticDebugFormat();
 
 describe('Privacy', function () {
@@ -87,7 +88,76 @@ describe('Privacy', function () {
             return super._private(into);
         }
     }
-    
+
+    // Cached Functional Mixin pattern
+    // https://javascriptweblog.wordpress.com/2011/05/31/a-fresh-look-at-javascript-mixins/
+    const applyHeightMixin = (function HeightMixinDecorator () {
+        const className = 'HeightMixin',
+            privates = new WeakMap();
+
+        /* jshint -W040 */ // Possible strict violation.
+        function initHeightMixin (height) {
+            privates.set(this, {
+                height: height
+            });
+        }
+
+        function height () {
+            return privates.get(this).height + 'mm';
+        }
+        /* jshint +W040 */ // Possible strict violation.
+
+        return function HeightMixin () {
+            // TODO non-enumerable?
+            this[className] = {
+                init: initHeightMixin,
+                _private: function (into, derivedPrivates, derivedClassName) {
+                    Privacy.prototype._private.call(this, into,
+                        derivedPrivates || privates, derivedClassName || className);
+                }
+            };
+            Object.defineProperty(this[className], '_className', {
+                value: className,
+                enumerable: true,
+                configurable: false,
+                writable: false
+            });
+            this.height = height;
+            return this;
+        };
+    })();
+
+    class SecretHeight extends Secret {
+        constructor (secret, heightMM) {
+            super(secret);
+            this.HeightMixin.init.call(this, heightMM);
+            secretheight.set(this, {
+                relative: 'absolute'
+            });
+            return this;
+        }
+
+        /** @override */
+        _inherits (into) {
+            into = super._inherits(into);
+            into.chain.push(':HeightMixin');
+            into.chain.unshift('SecretHeight');
+            into.classes.SecretHeight = true;
+            into.classes.HeightMixin = true;
+            return into;
+        }
+
+        /** @override */
+        _private (into, derivedPrivates, derivedClassName) {
+            into = super._private(into,
+                derivedPrivates || secretheight, derivedClassName || 'SecretHeight');
+            this.HeightMixin._private.call(this, into);
+            return super._private(into);
+        }
+
+    }
+    applyHeightMixin.call(SecretHeight.prototype);
+
     beforeEach(function () {
         this.privates = new WeakMap();
         this.object = new Privacy();
@@ -302,5 +372,75 @@ describe('Privacy', function () {
             }).to.throw('Abstract method invocation. Should be implemented by a derived class.');
 
         });
+    });
+
+    describe('SecretHeight isa Secret,HeightMixin', function () {
+
+        beforeEach(function () {
+            this.secretHeight = new SecretHeight('quiet', 22);
+        });
+
+        it('should be unable to see private data for derived classes with mixins', function () {
+
+            expect(util.inspect(this.secretHeight))
+                .to.be.equal('SecretHeight {}');
+        });
+
+        it('should provide class name for derived classes with mixins', function () {
+
+            expect(this.secretHeight._className)
+                .to.deep.equal('SecretHeight');
+        });
+
+        it('should provide Mixin class name property for derived classes with mixins', function () {
+
+            expect(this.secretHeight.HeightMixin._className)
+                .to.deep.equal('HeightMixin');
+        });
+
+        it('should provide inheritance information for derived classes with mixins', function () {
+
+            expect(this.secretHeight._inherits())
+                .to.be.deep.equal({
+                chain: [ 'SecretHeight', 'Secret', 'Privacy', ':HeightMixin' ],
+                classes: {
+                    SecretHeight: true,
+                    Secret: true,
+                    HeightMixin: true,
+                    Privacy: true
+                }
+            });
+        });
+
+        it('derived class should provide cloned privates for debugger inspection', function () {
+
+            expect(this.secretHeight._private())
+                .to.be.deep.equal({
+                Privacy: {},
+                Secret: {
+                    secret: 'quiet',
+                    add: 'value'
+                },
+                SecretHeight: {
+                    relative: 'absolute'
+                },
+                HeightMixin: {
+                    height: 22
+                },
+            });
+        });
+
+        it('should set privates for derived classes', function () {
+
+            expect(this.secretHeight.secret).to.be.equal('quiet');
+        });
+
+        it('should format privates in a nice debug string', function () {
+            expect(this.secretHeight.toDebugString())
+                .to.be.equal('<SecretHeight->Secret->Privacy->:HeightMixin\n' +
+                    '{ Secret: { secret: \'quiet\', add: \'value\' },\n  ' +
+                    'HeightMixin: { height: 22 } }>');
+        });
+
     });
 });
