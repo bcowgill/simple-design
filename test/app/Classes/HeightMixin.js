@@ -18,13 +18,13 @@ const applyHeightMixin = (function HeightMixinDecorator () {
         });
     }
 
-    function height () {
+    function getHeight () {
         return privates.get(this).height + 'mm';
     }
     /* jshint +W040 */ // Possible strict violation.
 
     return function HeightMixin () {
-        // TODO non-enumerable?
+        // 'this' should be a Class.prototype
         this[category] = {
             init: initHeightMixin,
             _private: function (into, derivedPrivates, derivedClassName) {
@@ -35,11 +35,15 @@ const applyHeightMixin = (function HeightMixinDecorator () {
         };
         Object.defineProperty(this[category], '_className', {
             value: category,
-            enumerable: true,
+            enumerable: false,
             configurable: false,
             writable: false
         });
-        this.height = height;
+        Object.defineProperty(this, 'height', {
+            get: getHeight,
+            enumerable: false,
+            configurable: false,
+        });
         return this;
     };
 })();

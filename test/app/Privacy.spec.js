@@ -225,7 +225,7 @@ describe('Privacy', function () {
         });
     });
 
-    describe('SecretHeight isa Secret,HeightMixin', function () {
+    describe('SecretHeight isa Secret, HeightMixin', function () {
 
         beforeEach(function () {
             this.secretHeight = new SecretHeight('quiet', 22);
