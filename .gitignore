@@ -34,7 +34,13 @@ build/Release
 # Deployed apps should consider commenting this line out:
 # see https://npmjs.org/doc/faq.html#Should-I-check-my-node_modules-folder-into-git
 /node_modules/
-/npm-debug.log
+/npm-debug.log*
+
+# Optional npm cache directory
+.npm
+
+# Optional REPL history
+.node_repl_history
 
 # Created by https://www.gitignore.io
 
